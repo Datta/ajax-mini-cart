@@ -1,0 +1,94 @@
+<?php
+/**
+ * Magento 
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/osl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *  
+ * 
+ * @category    Layout
+ * @package     Datta_Ajaxminicart
+ * @created     Dattatray Yadav  28th May, 2014 3:55m
+ * @author      Clarion magento team<Dattatray Yadav>  
+ * @purpose     Manage top mini cart   
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License   
+ */
+
+/**
+ * Shoping cart sidebar
+ *
+ * @see Mage_Checkout_Block_Cart_Sidebar
+ */
+
+?>            
+ 
+ <?php 
+ $configValue = Mage::getStoreConfig('ajaxminicart/general/enable');
+ if($configValue):
+ ?> 
+<!-- shopping cart -->     
+
+<div class="col-xs-2 col-sm-2 cart-container skip-minicart">
+    <?php $_cartQty = $this->getSummaryCount() ?>
+    <div class="header-cart">
+        <div class="inner">
+            <div class="relative">
+                <a href="<?php echo Mage::helper('checkout/cart')->getCartUrl(); ?>" class="btn btn-iconed cart-btn"> <i class="icon-shopcart"></i> <span class="cart-value" id="mini-cart-total"><?php echo Mage::helper('checkout')->formatPrice($this->getSubtotal()) ?></span> </a>
+                <?php $_items = $this->getRecentItems() ?>
+                <!-- CART ITEMS -->
+                
+                    <div class="cart-items-box" style="display:none">
+                    <div class="cart-header" id="header-text"> 
+                    <?php if(count($_items)): ?>                         
+                            Showing <?php echo count($_items); ?> of <?php echo count($_items); ?> items added                      
+                         <?php 
+                         else:                           
+                            echo "No items in cart to dispaly";
+                         
+                         endif ?> 
+                      </div>
+                        
+                        <ul class="items clearfix" id="mini-cart-summary" style="min-height: 10px;">
+                            <?php foreach($_items as $_item): ?>
+                                <?php echo $this->getItemHtml($_item) ?>
+                            <?php endforeach; ?>
+                        </ul> 
+                        <div class="row mini-cart-footer" id="minicartfooterid">
+                           <a type="submit" href="<?php echo Mage::getUrl('checkout/cart') ?>"  title="View Cart" class="btn btn-primary button view-cart-btn"><span>View Cart</span></a>  
+                            <a href="<?php echo Mage::helper('checkout/url')->getCheckoutUrl(); ?>"  title="Checkout" class="btn btn-primary button col-md-3 mini-cart-see-all"><span>Checkout</span></a>                           
+                        </div>  
+                    </div>          
+               
+                <!-- /CART ITEMS -->
+            </div>
+        </div>
+
+    </div>
+</div>
+<!-- /shopping cart -->  
+ <?php 
+    $version =  Mage::getVersion(); 
+    if((float)$version != 1.9):
+        echo "<style> .relative {position:relative;} </style>";
+    endif;
+?>
+<div id="load_animate" style="display:none; position:fixed; top:46%; left:46%; z-index:9999"><img src="<?php echo  $this->getSkinUrl('images/ajax_load.gif');  ?>" alt="Loading.." title="Loading..."></div>
+<div class="notification" id="notification" style="display:none; height:80px; "></div>
+<?php endif;?>
+  
+
+

@@ -1,0 +1,150 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento 
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/osl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *  
+ * 
+ * @category    Datta
+ * @package     Datta_Ajaxminicart
+ * @created     Dattatray Yadav  28th May, 2014 3:30pm
+ * @author      Clarion magento team<Dattatray Yadav>  
+ * @purpose     model configuration settings  
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License   
+ */
+-->
+<config>
+    <modules>
+        <Datta_Ajaxminicart>
+            <version>2.0.1</version>
+        </Datta_Ajaxminicart>
+    </modules>
+    <global>
+        <models>
+            <ajaxminicart>
+                <class>Datta_Ajaxminicart_Model</class>
+            </ajaxminicart>
+        </models>
+        <blocks>
+            <ajaxminicart>
+                <class>Datta_Ajaxminicart_Block</class>
+            </ajaxminicart>
+        </blocks>
+        <helpers>
+            <ajaxminicart>
+                <class>Datta_Ajaxminicart_Helper</class>
+            </ajaxminicart>
+        </helpers>
+        <rewrite>
+            <Datta_ajaxminicart_checkout_cart>
+                <from><![CDATA[#^/checkout/cart/#]]></from>
+                <to>/ajaxminicart/checkout_cart/</to>
+            </Datta_ajaxminicart_checkout_cart>
+        </rewrite>
+    </global>
+    <frontend>
+        <routers>
+            <ajaxminicart>
+                <use>standard</use>
+                <args>
+                    <module>Datta_Ajaxminicart</module>
+                    <frontName>ajaxminicart</frontName>
+                </args>
+            </ajaxminicart>
+        </routers>
+        <events>
+            <checkout_cart_add_product_complete>
+                <observers>
+                    <ajaxminicart>
+                        <type>singleton</type>
+                        <class>ajaxminicart/observer</class>
+                        <method>addToCartEvent</method>
+                    </ajaxminicart>
+                </observers>
+            </checkout_cart_add_product_complete>
+            <checkout_cart_update_item_complete>
+                <observers>
+                    <ajaxminicart>
+                        <type>singleton</type>
+                        <class>ajaxminicart/observer</class>
+                        <method>updateItemEvent</method>
+                    </ajaxminicart>
+                </observers>
+            </checkout_cart_update_item_complete>
+            <!--for configurable products-->
+            <controller_action_postdispatch_catalog_product_view>
+                <observers>
+                    <ajaxminicart>
+                        <class>ajaxminicart/observer</class>
+                        <method>getConfigurableOptions</method>
+                    </ajaxminicart>
+                </observers>
+            </controller_action_postdispatch_catalog_product_view>
+            <!--for group products-->
+            <controller_action_predispatch_checkout_cart_add>
+                <observers>
+                    <ajaxminicart>
+                        <type>singleton</type>
+                        <class>ajaxminicart/observer</class>
+                        <method>getGroupProductOptions</method>
+                    </ajaxminicart>
+                </observers>
+            </controller_action_predispatch_checkout_cart_add>
+        </events>
+        <layout>
+            <updates>
+                <ajaxminicart>
+                    <file>ajaxminicart.xml</file>
+                </ajaxminicart>
+            </updates>
+        </layout>
+    </frontend>
+    <adminhtml>
+        <acl>
+            <resources>
+                <all>
+                    <title>Allow Everything</title>
+                </all>
+                <admin>
+                    <children>
+                        <system>
+                            <children>
+                                <config>
+                                    <children>
+                                        <ajaxminicart>
+                                            <title>Ajax Minicart Settings</title>
+                                        </ajaxminicart>
+                                    </children>
+                                </config>
+                            </children>
+                        </system>
+                    </children>
+                </admin>
+            </resources>
+        </acl>
+    </adminhtml>
+    <default>
+        <ajaxminicart>
+            <general>
+                <enable>1</enable>
+                <update_blocks>a:2:{s:2:"id";a:3:{i:0;s:17:".block.block-cart";i:1;s:14:".header .links";i:2;s:26:".checkout-cart-index .cart";}s:3:"xml";a:3:{i:0;s:12:"cart_sidebar";i:1;s:9:"top.links";i:2;s:13:"checkout.cart";}}</update_blocks>
+       cartsubtotal     </general>
+        </ajaxminicart>
+    </default>
+</config>
